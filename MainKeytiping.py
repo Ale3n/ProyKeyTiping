@@ -1,5 +1,7 @@
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QVBoxLayout,QLineEdit
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QVBoxLayout,QLineEdit,QApplication, QTextEdit
+from PySide6.QtGui import QTextCharFormat, QColor, QTextCursor
+from PySide6.QtCore import Qt
 
 
 vectorText = [ "El sol de Venezuela es mucho mas azul, dice y senala al cielo tras terminar el ensayo de La fuerza del destino, una opera de Giuseppe Verdi.",
@@ -19,6 +21,55 @@ vectorText = [ "El sol de Venezuela es mucho mas azul, dice y senala al cielo tr
     "Para ello, comenzo a escribir a figuras del mundo musical venezolano que residian en el exterior en busca de ayuda.",
 
     "Entre ellas estaba la pianista venezolana Gabriela Montero, reconocida internacionalmente por sus presentaciones en eventos de gran relevancia."]
+class CustonLineEdit(QTextEdit):
+    def __init__(self,indiceaux):
+        super().__init__()
+        self.indice = indiceaux
+        self.setFixedHeight(35)
+        self.setTabChangesFocus(True)
+
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        self.setLineWrapMode(QTextEdit.NoWrap)
+
+        self.textChanged.connect(self.resaltar_letra)
+
+
+    def resaltar_letra(self):
+        self.blockSignals(True)
+        cursor = self.textCursor()
+        posicion = cursor.position()
+        texto = self.toPlainText()
+        texto2 = vectorText[self.indice()]
+
+        #limpiamos formato
+        cursor.select(QTextCursor.SelectionType.Document)
+        cursor.setCharFormat(QTextCharFormat())
+
+        #nuevo formato en rojo
+        formato = QTextCharFormat()
+        formato.setForeground(QColor("White"))
+        formato.setBackground(QColor("Red"))
+
+        i = 0
+        longitud = len(texto)
+
+        while i < longitud:
+            char1 = texto[i]
+            char2 = texto2[i]
+
+            if char1.lower() != char2.lower():
+                cursor.setPosition(i)
+                cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor)
+                cursor.setCharFormat(formato)
+
+            i += 1
+
+        cursor.setPosition(posicion)
+        self.setTextCursor(cursor)
+        self.blockSignals(False)
+
 class VentanaPrinci(QWidget):
     def __init__(self):
         super().__init__()
@@ -30,7 +81,7 @@ class VentanaPrinci(QWidget):
         self.etiqueta2 = QLabel(vectorText[self.indice])
         self.etiqueta5 = QLabel("verdadero")
         self.etiqueta2.setWordWrap(True)
-        self.Endatos = QLineEdit()
+        self.Endatos = CustonLineEdit(self.getIndice)
 
         self.setStyleSheet("""background-color: black; color: white;""")
         self.etiqueta1.setStyleSheet("font-size: 20px; color: blue; font-weight: bold; ")
@@ -54,16 +105,19 @@ class VentanaPrinci(QWidget):
                     }
                 """)
         #self.indice += 1
-        self.Endatos.returnPressed.connect(self.ejeDos)
-
-
+        #self.Endatos.returnPressed.connect()
         layout.addWidget(self.etiqueta1)
         layout.addWidget(self.etiqueta2)
         layout.addWidget(self.etiqueta5)
         layout.addWidget(self.Endatos)
         self.setLayout(layout)
-
-
+    def keyPressEvent(self, event):
+        # Bloquear ENTER para que sea una sola línea
+        if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+            #print("ENTER presionado")
+            self.ejeDos()
+            return
+        super().keyPressEvent(event)
 
     def cambiartexto(self):
         if self.indice < len(vectorText):
@@ -91,12 +145,14 @@ class VentanaPrinci(QWidget):
             #self.Endatos.setDisabled(True)
             return False
 
-
     def ejeDos(self):
         flag = self.sonIguales()
         if flag:
             self.indice += 1
             self.cambiartexto()
+
+    def getIndice(self):
+        return self.indice
 
 
 
