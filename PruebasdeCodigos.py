@@ -2,17 +2,20 @@ import sys
 from PySide6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QTextEdit
 from PySide6.QtGui import QTextCharFormat, QColor, QTextCursor
 from PySide6.QtCore import Qt, Signal  # Importamos Signal
-
+#dividelo para un vector en python que los elementos nos sean muy largos
 vectorText = [
-    "El sol de Venezuela es mucho mas azul, dice y senala al cielo tras terminar el ensayo de La fuerza del destino, una opera de Giuseppe Verdi.",
-    "La obra narra un amor desventurado en medio de la guerra y aborda temas como el hambre, el poder y el exilio, realidades que Luis conoce de primera mano.",
-    "Hace siete anos, debido a la precariedad en la que vivia, Luis tuvo que salir de Venezuela y dejar atras su vida cotidiana.",
-    "A pesar de tener un trabajo estable y un sueldo en su pais, el dinero solo le alcanzaba para cubrir la comida del dia.",
-    "En ese momento, Luis dudaba si debia abandonar su sueno de ser cantante lirico, inspirado por el peruano Juan Diego Florez.",
-    "La otra opcion era viajar a Argentina para trabajar en una carniceria, una de las pocas alternativas laborales que tenia aseguradas.",
-    "Finalmente decidio hacer el intento y no renunciar a su profundo deseo de cantar.",
-    "Para ello, comenzo a escribir a figuras del mundo musical venezolano que residian en el exterior en busca de ayuda.",
-    "Entre ellas estaba la pianista venezolana Gabriela Montero, reconocida internacionalmente por sus presentaciones en eventos de gran relevancia."
+"this change addresses safety concerns in emergencies, such as crashes or power failures",
+    "all new models must have exterior door handles with mechanical redundancy and sufficient operating space",
+    "When Stunning or inflicting attribute Anomaly on an enemy",
+    "All squad members gain 1 dexterity Count, stacking up to 3 times",
+    "Police labor activities are normally conducted in pairs",
+    "you lack what it takes to win this war",
+    "Upcoming character shown briefly but otherwise the story presence is very minimal",
+    "might make an appearance during the averyone is here moment",
+    "Police labor activities are normally conducted in pairs",
+    "So could the 1st Unit go on watch while we go home?",
+    "You should've gotten it long ago","By withholding the facts from us",
+    "schedule"
 ]
 
 
@@ -78,7 +81,7 @@ class CustonLineEdit(QTextEdit):
                 char1 = texto[i]
                 char2 = texto2[i]
 
-                if char1.lower() != char2.lower():
+                if char1 != char2:
                     cursor.setPosition(i)
                     cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor)
                     cursor.setCharFormat(formato)
@@ -111,15 +114,16 @@ class VentanaPrinci(QWidget):
         self.Endatos.returnPressed.connect(self.ejeDos)
 
         # Estilos
-        self.setStyleSheet("""background-color: black; color: white;""")
-        self.etiqueta1.setStyleSheet("font-size: 20px; color: blue; font-weight: bold; ")
+        self.setStyleSheet("""background-color: #1A1A1A; color: white;""")
+        self.etiqueta1.setStyleSheet("font-size: 20px; color: white; font-weight: bold; ")
         self.etiqueta2.setStyleSheet("""
                     font-size: 18px; 
                     color: #bdc3c7; 
-                    font-family: Verdana;
+                    font-family: Helvetica;
                     padding: 10px;
-                    border: 1px solid #444;
-                    border-radius: 5px;
+                    border: 3px solid #707070;
+                    border-radius: 10px;
+                    background-color: #424242;
                 """)
         self.etiqueta5.setStyleSheet("font-size: 14px; font-weight: bold;")
         self.Endatos.setStyleSheet("""
